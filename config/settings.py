@@ -73,13 +73,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 load_dotenv()
 DATABASES = {
-'default': {
-'ENGINE': 'django.db.backends.postgresql_psycopg2',
-'NAME': os.getenv('DATABASE_NAME'),
-'USER': os.getenv('DATABASE_USER'),
-'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-'HOST': os.getenv('DATABASE_HOST'),
-'PORT': os.getenv('DATABASE_PORT', default='5432'),
+    'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': os.getenv('DATABASE_NAME'),
+    'USER': os.getenv('DATABASE_USER'),
+    'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+    'HOST': os.getenv('DATABASE_HOST'),
+    'PORT': os.getenv('DATABASE_PORT', default='5432'),
 }
 }
 
@@ -126,31 +126,37 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000', 
+    'http://localhost:8000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://read-and-write.example.com", 
+    "https://read-and-write.example.com",
 ]
+
+AUTH_USER_MODEL = 'users.User'
+
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_ALL_ORIGINS = False
 
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 
 # URL-адрес брокера сообщений
-CELERY_BROKER_URL = 'redis://localhost:6379' 
+CELERY_BROKER_URL = 'redis://localhost:6379'
 
-# URL-адрес брокера результатов, также Redis  
-CELERY_RESULT_BACKEND = 'redis://localhost:6379' 
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
 # Флаг отслеживания выполнения задач
-CELERY_TASK_TRACK_STARTED = True 
+CELERY_TASK_TRACK_STARTED = True
 
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
@@ -165,10 +171,5 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+TELEGRAM_URL = "https://api.telegram.org/bot"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
