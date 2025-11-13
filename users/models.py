@@ -10,6 +10,9 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=30)
     city = models.CharField(max_length=50)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    chat_id = models.CharField(
+        max_length=255, verbose_name="chat_id", null=True, blank=True
+    )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -40,7 +40,7 @@ class Habit(models.Model):
         if self.reward and self.related_habit:
             raise ValidationError("Нельзя одновременно указать вознаграждение и связанную привычку.")
 
-        if self.execution_time > 120:
+        if self.execution_time > timedelta(seconds=120):
             raise ValidationError("Время выполнения не может превышать 120 секунд.")
 
         if self.related_habit and not self.related_habit.is_pleasant:
@@ -52,5 +52,9 @@ class Habit(models.Model):
         if self.periodicity > 7:
             raise ValidationError("Нельзя выполнять привычку реже, чем 1 раз в 7 дней.")
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.name} ({'публичная' if self.is_public else 'личная'})"
+        return f"{self.name} ({'публичная' if self.is_published else 'личная'})"

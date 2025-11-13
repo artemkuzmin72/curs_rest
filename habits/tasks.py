@@ -10,8 +10,11 @@ def send_habit_reminders():
     habits = Habit.objects.filter(reminder_time__hour=now.hour,
                                   reminder_time__minute=now.minute)
     for habit in habits:
-        if habit.owner.profile.telegram_chat_id:  # Предполагаем, что у пользователя есть chat_id
-            send_telegram_message(
-                chat_id=habit.owner.profile.telegram_chat_id,
-                text=f"Напоминание: пора выполнять привычку '{habit.name}'"
-            )
+        user = habit.owner
+
+        if not user or not user.chat_id:
+            continue
+
+        message = f"мне нужно {habit.action} в {habit.time} в {habit.place}"
+
+        send_telegram_message(message, habit.user.chat_id)

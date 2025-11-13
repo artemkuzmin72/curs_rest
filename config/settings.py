@@ -165,9 +165,9 @@ CELERY_TIMEZONE = 'Europe/Moscow'
 CELERY_ENABLE_UTC = False
 
 CELERY_BEAT_SCHEDULE = {
-    'deactivate-inactive-users-every-midnight': {
-        'task': 'user.tasks.deactivate_inactive_users',
-        'schedule':  crontab(hour=0, minute=0),
+    'habit-reminder-every-minute': {
+        'task': 'habits.tasks.send_habit_reminders',
+        'schedule':  crontab(minute='*'),
     },
 }
 
