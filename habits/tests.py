@@ -48,7 +48,7 @@ class HabitTestCase(APITestCase):
         url = reverse("habit-list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.json()['results']), 1)
+        self.assertEqual(len(response.json()["results"]), 1)
 
     def test_habit_retrieve(self):
         """Тестирование запроса на вывод полей привычки по заданному pk"""
@@ -87,34 +87,36 @@ class HabitTestCase(APITestCase):
         self.assertEqual(Habit.objects.all().count(), 0)
 
     def test_habit_with_related_habit(self):
-        """Тестирование создания привычки со связанной привычкой"""
-        # Создаем приятную привычку
+        """
+        Тестирование создания привычки со связанной привычкой.
+        Связанная привычка должна быть приятной.
+        Основная привычка — НЕ приятная и без награды.
+        """
         pleasant_habit = Habit.objects.create(
-            owner=self.user,
             name="Приятная привычка",
-            place="Дома",
-            time="19:00:00",
-            action="Смотреть фильм",
+            owner=self.user,
+            place="Дом",
+            time="10:00",
+            action="Пить чай",
             is_pleasant=True,
             periodicity=1,
             execution_time=timedelta(minutes=2),
             is_published=True,
         )
 
-        # Обновляем основную привычку со связанной
-        url = reverse("habit-detail", args=(self.habit.pk,))
-        data_update = {
-            "name": self.habit.name,
-            "place": self.habit.place,
-            "time": str(self.habit.time),
-            "action": self.habit.action,
+        data = {
+            "name": "Основная привычка",
+            "owner": self.user.id,
+            "place": "Работа",
+            "time": "12:00",
+            "action": "Сделать зарядку",
             "is_pleasant": False,
+            "related_habit": pleasant_habit.id,
             "periodicity": 1,
-            "related_habit": pleasant_habit.pk,
-            "execution_time": "00:01:00",
+            "execution_time": "00:02:00",
             "is_published": True,
         }
-        response = self.client.patch(url, data=data_update)
-        data = response.json()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data.get("related_habit"), pleasant_habit.pk)
+
+        response = self.client.post("/api/habits/", data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

@@ -8,27 +8,63 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Habit',
+            name="Habit",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('place', models.CharField(max_length=100, verbose_name='Место')),
-                ('time', models.TimeField(verbose_name='Время')),
-                ('action', models.CharField(max_length=100, verbose_name='Действие')),
-                ('is_pleasant', models.BooleanField(default=True, verbose_name='Признак приятной привычки')),
-                ('periodicity', models.PositiveIntegerField(default=1, verbose_name='Число повторений в неделю')),
-                ('reward', models.CharField(blank=True, max_length=100, null=True, verbose_name='Вознаграждение')),
-                ('execution_time', models.DurationField(default=datetime.timedelta(seconds=120), verbose_name='Время на выполнение')),
-                ('is_published', models.BooleanField(default=True, verbose_name='Признак публичности')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("place", models.CharField(max_length=100, verbose_name="Место")),
+                ("time", models.TimeField(verbose_name="Время")),
+                ("action", models.CharField(max_length=100, verbose_name="Действие")),
+                (
+                    "is_pleasant",
+                    models.BooleanField(
+                        default=True, verbose_name="Признак приятной привычки"
+                    ),
+                ),
+                (
+                    "periodicity",
+                    models.PositiveIntegerField(
+                        default=1, verbose_name="Число повторений в неделю"
+                    ),
+                ),
+                (
+                    "reward",
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name="Вознаграждение",
+                    ),
+                ),
+                (
+                    "execution_time",
+                    models.DurationField(
+                        default=datetime.timedelta(seconds=120),
+                        verbose_name="Время на выполнение",
+                    ),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(
+                        default=True, verbose_name="Признак публичности"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Привычка',
-                'verbose_name_plural': 'Привычки',
+                "verbose_name": "Привычка",
+                "verbose_name_plural": "Привычки",
             },
         ),
     ]
