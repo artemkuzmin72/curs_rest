@@ -18,7 +18,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            email=validated_data.get("email"), password=validated_data["password"]
-        )
+        """
+        Создание пользователя без кастомного менеджера.
+        Корректно хеширует пароль через set_password().
+        """
+        password = validated_data.pop("password")
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
         return user

@@ -22,11 +22,5 @@ class User(AbstractUser):
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
 
-    def create(self, validated_data):
-        user = User.objects.create(**validated_data)
-        user.set_password(user.password)
-        user.save()
-        return user
-
     def __str__(self):
         return self.email
